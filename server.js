@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const data = [{id:1,name:"Portrait"},{ id:1,name:"Landscape"}]; 
-app.get('/', (req,resp) => { resp.json(data) } );
+const artdata = fetch('artists.json'); 
+app.get('/', (req,resp) => { resp.json(artdata) } );
 
 
 let port = 8080; app.listen(port, () => {
