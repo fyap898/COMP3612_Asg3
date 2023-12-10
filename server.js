@@ -19,7 +19,7 @@ app.get('/api/paintings', (req,resp) => {
 app.get('/api/paintings/:id', (req,resp) => { 
     const id = req.params.id;
 
-    const pid = paintingData.find(p => p.paintingID === id);
+    const pid = paintingData.find(p => p.paintingID == id);
 
     if(pid)
     {
