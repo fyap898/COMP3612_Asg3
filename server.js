@@ -16,7 +16,7 @@ app.get('/api/paintings', (req,resp) => {
 });
 
 //Return painting id
-app.get('/api/paintings/:id', (req,resp) => { 
+app.get('/api/painting/:id', (req,resp) => { 
     const id = req.params.id;
 
     const pid = paintingData.find(p => p.paintingID == id);
@@ -29,6 +29,42 @@ app.get('/api/paintings/:id', (req,resp) => {
     }
 });
 
+//Return painting/gallery
+app.get('/api/painting/gallery/:id', (req,resp) => {
+    const id = req.params.id;
+
+    let pid;
+
+    paintingData.forEach(p => {
+        if(p.gallery.galleryID === id)
+        {
+            pid = p;
+            if(pid)
+            {
+                resp.json(pid);
+            }
+        }
+    });
+    if (!pid)
+    {
+        resp.json([{Gid: 'Invalid gallery ID'}]);
+    }
+});
+
+//Return painting/artist
+app.get('/api/painting/artist/:id', (req,resp) => {
+    const id = req.params.id;
+    console.log(id);
+
+    const pid = paintingData.find(p => p.artist.artistID == id)
+
+    if(pid)
+    {
+        resp.json(pid);
+    } else {
+        resp.json([{Aid: 'Invalid artist ID'}]);
+    }
+});
 
 let port = 8080; 
 app.listen(port, () => {
