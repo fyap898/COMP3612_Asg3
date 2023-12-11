@@ -32,21 +32,14 @@ app.get('/api/painting/:id', (req,resp) => {
 //Return painting/gallery
 app.get('/api/painting/gallery/:id', (req,resp) => {
     const id = req.params.id;
+        
+    const pgSet = paintingData.filter(p => p.gallery.galleryID == id);
 
-    let pid;
-
-    paintingData.forEach(p => {
-        if(p.gallery.galleryID === id)
-        {
-            pid = p;
-            if(pid)
-            {
-                resp.json(pid);
-            }
-        }
-    });
-    if (!pid)
+    if(pgSet.length)
     {
+        resp.json(pgSet);
+        
+    } else {
         resp.json([{Gid: 'Invalid gallery ID'}]);
     }
 });
@@ -54,17 +47,33 @@ app.get('/api/painting/gallery/:id', (req,resp) => {
 //Return painting/artist
 app.get('/api/painting/artist/:id', (req,resp) => {
     const id = req.params.id;
-    console.log(id);
 
-    const pid = paintingData.find(p => p.artist.artistID == id)
+    const paSet = paintingData.filter(p => p.artist.artistID == id);
 
-    if(pid)
+    if(paSet.length)
     {
-        resp.json(pid);
+        resp.json(paSet);
     } else {
         resp.json([{Aid: 'Invalid artist ID'}]);
-    }
+    } 
 });
+
+//Return artist country
+app.get('/api/artists/:country', (req,resp) => {
+    const country = req.params.country.toLowerCase();
+
+    console.log(artistData[1].Nationality.toLowerCase());
+    const acSet = artistData.filter(p => p.Nationality.toLowerCase() === country);
+
+    if(acSet.length)
+    {
+        resp.json(acSet);
+    } else {
+        resp.json([{Artist_Country: 'Invalid country'}]);
+    }
+
+});
+
 
 let port = 8080; 
 app.listen(port, () => {
