@@ -4,8 +4,6 @@ const artistData = require('./scripts/artists.json');
 const galleryData = require('./scripts/galleries.json');
 const paintingData = require('./scripts/paintings-nested.json');
 
-
-
 //Return all painting
 app.get('/api/paintings', (req,resp) => { 
     resp.json(paintingData) 
@@ -21,7 +19,7 @@ app.get('/api/painting/:id', (req,resp) => {
     {
         resp.json(pid);
     } else {
-        resp.json([{Pid: 'Invalid painting ID'}]);
+        resp.json([{Pid: 'Invalid Painting ID'}]);
     }
 });
 
@@ -36,7 +34,7 @@ app.get('/api/painting/gallery/:id', (req,resp) => {
         resp.json(pgSet);
         
     } else {
-        resp.json([{Gid: 'Invalid gallery ID'}]);
+        resp.json([{Gid: 'Invalid Gallery ID'}]);
     }
 });
 
@@ -50,7 +48,7 @@ app.get('/api/painting/artist/:id', (req,resp) => {
     {
         resp.json(paSet);
     } else {
-        resp.json([{Aid: 'Invalid artist ID'}]);
+        resp.json([{Aid: 'Invalid Artist ID'}]);
     } 
 });
 
@@ -65,9 +63,54 @@ app.get('/api/painting/year/:min/:max', (req,resp) => {
     {
         resp.json(pySet);
     } else {
-        resp.json([{Painting_Year: 'Invalid years input'}]);
+        resp.json([{Painting_Year: 'Invalid Years Input'}]);
     }
 });
+
+//Return painting/title/text
+app.get('/api/painting/title/:text', (req,resp) => {
+    const title = req.params.text;
+    title.toLowerCase;
+    console.log(title);
+
+    const ttSet = paintingData.filter(p => {
+        const pTitle = p.title.toLowerCase();
+        return pTitle.includes(title);
+    });
+
+    if(ttSet.length)
+    {
+        resp.json(ttSet);
+    } else {
+        resp.json([{Painting_Title: 'Invalid Title Text'}]);
+    }
+});
+
+//Return painting/color/name
+app.get('/api/painting/color/:name', (req,resp) => {
+    const name = req.params.name;
+    name.toLocaleLowerCase();
+    console.log(name);
+
+    const pcSet = paintingData.filter(p => {
+        let found = false;
+        p.details.annotation.dominantColors.forEach(c => {
+            const colorName = c.name.toLocaleLowerCase();
+            if(colorName.includes(name))
+                found = true;
+        });
+        return found;
+    });
+
+    if(pcSet.length)
+    {
+        resp.json(pcSet);
+    } else {
+        resp.json([{Painting_Color: 'Invalid Painting\'s Color'}]);
+    }
+});
+
+
 
 
 
