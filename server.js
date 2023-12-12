@@ -70,12 +70,9 @@ app.get('/api/painting/year/:min/:max', (req,resp) => {
 //Return painting/title/text
 app.get('/api/painting/title/:text', (req,resp) => {
     const title = req.params.text;
-    title.toLowerCase;
-    console.log(title);
 
     const ttSet = paintingData.filter(p => {
-        const pTitle = p.title.toLowerCase();
-        return pTitle.includes(title);
+        return ((p.title.toLowerCase().includes(title.toLowerCase())) || (p.title.toUpperCase().includes(title.toUpperCase())) || (p.title.includes(title))); 
     });
 
     if(ttSet.length)
@@ -88,14 +85,14 @@ app.get('/api/painting/title/:text', (req,resp) => {
 
 //Return painting/color/name
 app.get('/api/painting/color/:name', (req,resp) => {
-    const name = req.params.name;
-    name.toLocaleLowerCase();
+    const name = req.params.name.toLowerCase();
     console.log(name);
 
     const pcSet = paintingData.filter(p => {
         let found = false;
         p.details.annotation.dominantColors.forEach(c => {
-            const colorName = c.name.toLocaleLowerCase();
+            const colorName = c.name.toLowerCase();
+            // if((colorName.toLowerCase().includes(name.toLowerCase())) || (colorName.toUpperCase().includes(name.toUpperCase())) || (colorName.includes(name)))
             if(colorName.includes(name))
                 found = true;
         });
